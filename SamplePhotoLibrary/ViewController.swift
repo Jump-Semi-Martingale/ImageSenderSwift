@@ -7,9 +7,16 @@
 //
 
 import UIKit
+var bttype = "1"
+
 
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
+    
+    
+    
+    @IBOutlet weak var imageView2: UIImageView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +29,8 @@ class ViewController: UIViewController {
     }
 
     @IBAction func showPhotoLibrary(sender: UIButton) {
+        
+        bttype = "1"
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary){
             let imagePickerController = UIImagePickerController()
             imagePickerController.sourceType = .PhotoLibrary
@@ -30,6 +39,28 @@ class ViewController: UIViewController {
             presentViewController(imagePickerController, animated: true, completion: nil)
         }
     }
+    
+    
+    
+    
+    @IBAction func showPhotoLibrary2(sender: UIButton) {
+        
+        bttype = "2"
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary){
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.allowsEditing = true
+            imagePickerController.delegate = self
+            presentViewController(imagePickerController, animated: true, completion: nil)
+        }
+
+    }
+    
+    
+    
+    
+    
+    
 
 }
 
@@ -37,9 +68,20 @@ extension ViewController:UIImagePickerControllerDelegate, UINavigationController
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         
         if let info = editingInfo, let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage{
-            imageView.image = editedImage
+            if bttype == "1" {
+                imageView.image = editedImage
+            }
+            if bttype == "2" {
+                imageView2.image = editedImage
+            }
+
         }else{
-            imageView.image = image
+            if bttype == "1" {
+                imageView.image = image
+            }
+            if bttype == "2" {
+                imageView2.image = image
+            }
         }
         ImageSenderAlamofire.postImage(image)
         picker.dismissViewControllerAnimated(true, completion: nil)
